@@ -9,7 +9,9 @@ addEventListener('fetch', event => {
  */
 async function handleRequest(request) {
   const urls = await fetchFromURL(URL);
-  return new Response(urls, {
+  const chosenVariant = await pickOneVariantUrl(urls.variants);
+
+  return new Response(chosenVariant, {
     headers: { 'content-type' : 'application/json'}
   });
 }
@@ -17,4 +19,16 @@ async function handleRequest(request) {
 async function fetchFromURL(url) {
   const res = await fetch(url);
   return res.json()
+}
+
+async function pickOneVariantUrl(variants) {
+  const variantA = await variants[0];
+  const variantB = await variants[1];
+  const pickVariantA = await diceRoll();
+  const chosenVariant = pickVariantA ? variantA : variantB;
+  return chosenVariant;
+}
+
+async function diceRoll() {
+  return Math.random() < 0.5
 }
