@@ -1,3 +1,5 @@
+const URL = "https://cfw-takehome.developers.workers.dev/api/variants";
+
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
@@ -6,7 +8,13 @@ addEventListener('fetch', event => {
  * @param {Request} request
  */
 async function handleRequest(request) {
-  return new Response('Hello worker!', {
-    headers: { 'content-type': 'text/plain' },
-  })
+  const urls = await fetchFromURL(URL);
+  return new Response(urls, {
+    headers: { 'content-type' : 'application/json'}
+  });
+}
+
+async function fetchFromURL(url) {
+  const res = await fetch(url);
+  return res.json()
 }
